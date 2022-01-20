@@ -3,12 +3,12 @@ import * as THREE from "three";
 import "./style.css";
 import background from "./textures/black-and-white-room.jpg";
 
-
 const scene = new THREE.Scene();
 
 // loading the texture that is used as room backgroud.
 const textureLoader = new THREE.TextureLoader();
-textureLoader.load(background, function (texture) {
+textureLoader.loadAsync(background).then((texture) => {
+  loaderDisplayHandler();
   texture.encoding = THREE.sRGBEncoding;
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
@@ -67,17 +67,16 @@ scene.add(cube);
 
 torus.rotation.y = 1.5;
 
-
 function animate() {
   requestAnimationFrame(animate);
   cameraRotation();
   cubeRotation();
   // torusRotation();
-  
+
   camera.lookAt(scene.position);
   cubeCamera1.update(renderer, scene);
   material.envMap = cubeRenderTarget1.texture;
-  
+
   renderer.render(scene, camera);
 }
 animate();
@@ -93,7 +92,7 @@ function cubeRotation() {
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
   cube.rotation.z += 0.01;
-  
+
   // moving aroung torus
   const time = Date.now();
   cube.position.x = Math.cos(time * 0.001) * 20;
@@ -106,17 +105,32 @@ function cubeRotation() {
 //   lat = 0;
 function cameraRotation() {
   // lon += 0.15;
-  
+
   // phi = THREE.MathUtils.degToRad(90 - lat);
   // theta = THREE.MathUtils.degToRad(lon);
   // lat = Math.max(-85, Math.min(85, lat));
-  
+
   // camera.position.x = 100 * Math.sin(phi) * Math.cos(theta);
   // camera.position.y = 100 * Math.cos(phi);
   // camera.position.z = 100 * Math.sin(phi) * Math.sin(theta);
   const time = Date.now();
   camera.position.x = Math.cos(time * 0.0004) * 150;
   camera.position.z = Math.sin(time * 0.0002) * 150;
+}
+
+function loaderDisplayHandler() {
+  const canvas = document.querySelector("#bg");
+  const loader = document.querySelector(".loader");
+  canvas.style.display = "block";
+  canvas.style.opacity = 0;
+  canvas.style.transition = ".5s opacity linear";
+
+  setTimeout(() => {
+    canvas.style.opacity = 1;
+  }, 100);
+
+  loader.style.display = "none";
+  window.flag = false;
 }
 
 window.addEventListener("resize", () => {

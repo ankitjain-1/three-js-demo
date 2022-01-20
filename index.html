@@ -5,9 +5,48 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" />
     <title>three D</title>
+    <style>
+      body {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+      #bg {
+        display: none;
+      }
+      .loader h1 {
+        font-family: "sans";
+        letter-spacing: 20px;
+        font-size: 60px;
+      }
+    </style>
   </head>
   <body>
     <canvas id="bg"></canvas>
+    <div class="loader"><h1>Loading...</h1></div>
     <script type="module" src="/main.js"></script>
+    <script>
+      const loader = document.getElementsByClassName("loader");
+
+      let text = "LOADING";
+      const len = text.length;
+      let ind = 0;
+      window.flag = true;
+      const id = setInterval(() => {
+        const loader = document.querySelector(".loader h1");
+
+        let char = text[ind];
+        const regex1 = new RegExp(`${text[ind]}`);
+        text = text.replace(regex1, text[ind].toLowerCase());
+        ind++;
+        ind = ind % len;
+        loader.innerHTML = text;
+        text = text.toUpperCase();
+        if (!flag) clearInterval(id);
+      }, 100);
+    </script>
   </body>
 </html>
