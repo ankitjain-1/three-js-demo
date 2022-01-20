@@ -1,5 +1,11 @@
 node_modules
 .DS_Store
 dist
+build/
 dist-ssr
 *.local
+
+# firebase
+.firebase/
+.firebaserc
+firebase.json
