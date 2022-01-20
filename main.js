@@ -67,6 +67,11 @@ scene.add(cube);
 
 torus.rotation.y = 1.5;
 
+let lon = 0;
+let phi = 0;
+let theta = 0;
+let lat = 0;
+
 function animate() {
   requestAnimationFrame(animate);
   cameraRotation();
@@ -99,23 +104,18 @@ function cubeRotation() {
   cube.position.z = Math.sin(time * 0.001) * 20 + torusRad;
 }
 
-// let phi = 0,
-//   theta = 0;
-// let lon = 0,
-//   lat = 0;
 function cameraRotation() {
-  // lon += 0.15;
+  lon += 0.10;
+  phi = THREE.MathUtils.degToRad(90 - lat);
+  theta = THREE.MathUtils.degToRad(lon);
+  lat = Math.max(-85, Math.min(85, lat));
 
-  // phi = THREE.MathUtils.degToRad(90 - lat);
-  // theta = THREE.MathUtils.degToRad(lon);
-  // lat = Math.max(-85, Math.min(85, lat));
-
-  // camera.position.x = 100 * Math.sin(phi) * Math.cos(theta);
-  // camera.position.y = 100 * Math.cos(phi);
-  // camera.position.z = 100 * Math.sin(phi) * Math.sin(theta);
-  const time = Date.now();
-  camera.position.x = Math.cos(time * 0.0004) * 150;
-  camera.position.z = Math.sin(time * 0.0002) * 150;
+  camera.position.x = 100 * Math.sin(phi) * Math.cos(theta);
+  camera.position.y = 100 * Math.cos(phi);
+  camera.position.z = 100 * Math.sin(phi) * Math.sin(theta);
+  // const time = Date.now();
+  // camera.position.x = Math.cos(lon) * 150;
+  // camera.position.z = Math.sin(lon) * 150;
 }
 
 function loaderDisplayHandler() {
@@ -139,32 +139,32 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
 });
 
-// let onPointerDownPointerX,
-//   onPointerDownPointerY,
-//   onPointerDownLon,
-//   onPointerDownLat;
+let onPointerDownPointerX,
+  onPointerDownPointerY,
+  onPointerDownLon,
+  onPointerDownLat;
 
-// function onPointerDown(event) {
-//   event.preventDefault();
+function onPointerDown(event) {
+  event.preventDefault();
 
-//   onPointerDownPointerX = event.clientX;
-//   onPointerDownPointerY = event.clientY;
+  onPointerDownPointerX = event.clientX;
+  onPointerDownPointerY = event.clientY;
 
-//   onPointerDownLon = lon;
-//   onPointerDownLat = lat;
+  onPointerDownLon = lon;
+  onPointerDownLat = lat;
 
-//   document.addEventListener("pointermove", onPointerMove);
-//   document.addEventListener("pointerup", onPointerUp);
-// }
+  document.addEventListener("pointermove", onPointerMove);
+  document.addEventListener("pointerup", onPointerUp);
+}
 
-// document.addEventListener("pointerdown", onPointerDown);
+document.addEventListener("pointerdown", onPointerDown);
 
-// function onPointerMove(event) {
-//   lon = (event.clientX - onPointerDownPointerX) * 0.1 + onPointerDownLon;
-//   lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
-// }
+function onPointerMove(event) {
+  lon = (event.clientX - onPointerDownPointerX) * 0.1 + onPointerDownLon;
+  lat = (event.clientY - onPointerDownPointerY) * 0.1 + onPointerDownLat;
+}
 
-// function onPointerUp() {
-//   document.removeEventListener("pointermove", onPointerMove);
-//   document.removeEventListener("pointerup", onPointerUp);
-// }
+function onPointerUp() {
+  document.removeEventListener("pointermove", onPointerMove);
+  document.removeEventListener("pointerup", onPointerUp);
+}
