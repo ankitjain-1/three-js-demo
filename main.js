@@ -1,12 +1,14 @@
-import "./style.css";
-
 import * as THREE from "three";
+
+import "./style.css";
+import background from "./textures/black-and-white-room.jpg";
+
 
 const scene = new THREE.Scene();
 
 // loading the texture that is used as room backgroud.
 const textureLoader = new THREE.TextureLoader();
-textureLoader.load("textures/black-and-white-room.jpg", function (texture) {
+textureLoader.load(background, function (texture) {
   texture.encoding = THREE.sRGBEncoding;
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.background = texture;
